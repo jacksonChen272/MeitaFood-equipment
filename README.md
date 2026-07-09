@@ -49,6 +49,12 @@ https://jacksonchen272.github.io/MeitaFood-equipment/
 
 ## 更新紀錄
 
+### 2026-07-09｜v1.5 條碼彈窗修正
+
+- 修正設備表格的「條碼」按鈕無法開啟問題。
+- 將 `openBarcodeModal` 正確掛載到 `window`，讓表格列內按鈕可呼叫條碼彈窗。
+- 重新測試本機頁面，確認條碼彈窗可開啟並產生條碼圖形。
+
 ### 2026-07-09｜v1.4 設備專屬條碼
 
 - 新增每台設備的專屬條碼功能。
@@ -105,4 +111,3 @@ https://jacksonchen272.github.io/MeitaFood-equipment/
 - 更新項目 2
 - 修正項目 1
 ```
-
