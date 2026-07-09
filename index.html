@@ -515,9 +515,10 @@
       text-align: center;
     }
 
-    .barcode-label svg {
+    .barcode-label svg,
+    .barcode-label img {
       display: block;
-      width: 100%;
+      max-width: 100%;
       height: auto;
       margin: 10px auto;
     }
@@ -541,6 +542,48 @@
       color: var(--muted);
       font-size: 13px;
       line-height: 1.6;
+    }
+
+    .qr-url {
+      margin-top: 10px;
+      padding: 8px 10px;
+      border-radius: var(--radius);
+      background: #f5f8fb;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+      overflow-wrap: anywhere;
+    }
+
+    .asset-detail-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      padding: 20px;
+    }
+
+    .detail-item {
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fbfdff;
+    }
+
+    .detail-item.full {
+      grid-column: 1 / -1;
+    }
+
+    .detail-label {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .detail-value {
+      margin-top: 6px;
+      color: var(--ink);
+      font-weight: 800;
+      overflow-wrap: anywhere;
     }
 
     .progress-list {
@@ -723,6 +766,7 @@
       .nav { grid-template-columns: 1fr 1fr; }
       .stats-grid, .form-grid { grid-template-columns: 1fr; }
       .span-3 { grid-column: auto; }
+      .asset-detail-grid { grid-template-columns: 1fr; }
       .page-title h2 { font-size: 23px; }
     }
   </style>
@@ -892,7 +936,7 @@
         </div>
         <div class="field">
           <label for="assetType">設備類型 *</label>
-          <select id="assetType" required></select>
+          <input id="assetType" list="assetTypeList" required placeholder="可輸入新類型或選擇既有類型" />
         </div>
         <div class="field">
           <label for="assetStatus">狀態 *</label>
@@ -900,31 +944,31 @@
         </div>
         <div class="field">
           <label for="brand">品牌 *</label>
-          <input id="brand" required placeholder="例：Dell" />
+          <input id="brand" list="brandList" required placeholder="例：Dell" />
         </div>
         <div class="field">
           <label for="model">型號 *</label>
-          <input id="model" required placeholder="例：OptiPlex 7010" />
+          <input id="model" list="modelList" required placeholder="例：OptiPlex 7010" />
         </div>
         <div class="field">
           <label for="department">使用部門 *</label>
-          <input id="department" required placeholder="例：資訊部" />
+          <input id="department" list="departmentList" required placeholder="例：資訊部" />
         </div>
         <div class="field">
           <label for="user">使用人</label>
-          <input id="user" placeholder="例：王小明" />
+          <input id="user" list="userList" placeholder="例：王小明" />
         </div>
         <div class="field">
           <label for="location">放置地點</label>
-          <input id="location" placeholder="例：總公司 2F 機房" />
+          <input id="location" list="locationList" placeholder="例：總公司 2F 機房" />
         </div>
         <div class="field">
           <label for="ip">IP 位址</label>
-          <input id="ip" placeholder="例：192.168.10.25" />
+          <input id="ip" list="ipList" placeholder="例：192.168.10.25" />
         </div>
         <div class="field">
           <label for="mac">MAC 位址</label>
-          <input id="mac" placeholder="例：00:1A:2B:3C:4D:5E" />
+          <input id="mac" list="macList" placeholder="例：00:1A:2B:3C:4D:5E" />
         </div>
         <div class="field">
           <label for="purchaseDate">購買日期</label>
@@ -939,6 +983,14 @@
           <textarea id="notes" placeholder="維修紀錄、配件、盤點備註..."></textarea>
         </div>
       </div>
+      <datalist id="assetTypeList"></datalist>
+      <datalist id="brandList"></datalist>
+      <datalist id="modelList"></datalist>
+      <datalist id="departmentList"></datalist>
+      <datalist id="userList"></datalist>
+      <datalist id="locationList"></datalist>
+      <datalist id="ipList"></datalist>
+      <datalist id="macList"></datalist>
       <div class="modal-foot">
         <button class="btn" type="button" data-close-modal>取消</button>
         <button class="btn primary" type="submit">儲存設備</button>
@@ -966,7 +1018,7 @@
   <div class="modal" id="barcodeModal" role="dialog" aria-modal="true" aria-labelledby="barcodeTitle">
     <div class="modal-card">
       <div class="modal-head">
-        <h3 id="barcodeTitle">設備專屬條碼</h3>
+        <h3 id="barcodeTitle">設備專屬 QR Code</h3>
         <button class="btn icon" type="button" data-close-barcode>×</button>
       </div>
       <div class="barcode-preview">
@@ -974,8 +1026,22 @@
       </div>
       <div class="modal-foot">
         <button class="btn" type="button" data-close-barcode>關閉</button>
-        <button class="btn" type="button" id="downloadBarcodeBtn">下載 SVG</button>
-        <button class="btn primary" type="button" id="printBarcodeBtn">列印標籤</button>
+        <button class="btn" type="button" id="downloadBarcodeBtn">下載 PNG</button>
+        <button class="btn primary" type="button" id="printBarcodeBtn">列印 QR 標籤</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="assetDetailModal" role="dialog" aria-modal="true" aria-labelledby="assetDetailTitle">
+    <div class="modal-card">
+      <div class="modal-head">
+        <h3 id="assetDetailTitle">設備資訊</h3>
+        <button class="btn icon" type="button" data-close-detail>×</button>
+      </div>
+      <div class="asset-detail-grid" id="assetDetailContent"></div>
+      <div class="modal-foot">
+        <button class="btn" type="button" data-close-detail>關閉</button>
+        <button class="btn primary" type="button" id="detailQrBtn">查看 QR Code</button>
       </div>
     </div>
   </div>
@@ -999,7 +1065,7 @@
       measurementId: "G-1BKLNTKWV4"
     };
 
-    const assetTypes = ["桌上型電腦", "筆記型電腦", "印表機", "交換器", "無線 AP", "NAS", "掃描器", "網路設備", "其他"];
+    const defaultAssetTypes = ["桌上型電腦", "筆記型電腦", "印表機", "交換器", "無線 AP", "NAS", "掃描器", "網路設備", "其他"];
     const statuses = ["使用中", "維修中", "閒置", "報廢"];
 
     const defaultAssets = [
@@ -1140,7 +1206,8 @@
       firestore: null,
       unsubscribe: null,
       cloudReady: false,
-      firstCloudSnapshot: true
+      firstCloudSnapshot: true,
+      openedAssetFromUrl: false
     };
 
     const dom = {
@@ -1157,10 +1224,15 @@
       importModal: document.getElementById("importModal"),
       barcodeModal: document.getElementById("barcodeModal"),
       barcodeLabel: document.getElementById("barcodeLabel"),
+      assetDetailModal: document.getElementById("assetDetailModal"),
+      assetDetailContent: document.getElementById("assetDetailContent"),
       assetForm: document.getElementById("assetForm"),
       importFile: document.getElementById("importFile"),
       toast: document.getElementById("toast")
     };
+
+    let currentBarcodeAsset = null;
+    let currentDetailAsset = null;
 
     init();
 
@@ -1168,6 +1240,7 @@
       fillSelects();
       bindEvents();
       renderAll();
+      maybeOpenAssetFromUrl();
       initFirebase();
     }
 
@@ -1228,6 +1301,7 @@
           state.assets = cloudAssets;
           saveLocalCache();
           renderAll();
+          maybeOpenAssetFromUrl();
         },
         error => {
           console.error(error);
@@ -1272,22 +1346,53 @@
     }
 
     function fillSelects() {
-      fillOptions(dom.typeFilter, ["全部設備類型", ...assetTypes]);
+      fillOptions(dom.typeFilter, ["全部設備類型", ...getKnownValues("type", defaultAssetTypes)]);
       fillOptions(dom.statusFilter, ["全部使用狀態", ...statuses]);
-      fillOptions(document.getElementById("assetType"), assetTypes);
       fillOptions(document.getElementById("assetStatus"), statuses);
       refreshDeptFilter();
+      refreshDatalists();
     }
 
     function refreshDeptFilter() {
       const selected = dom.deptFilter.value;
-      const departments = [...new Set(state.assets.map(asset => asset.department).filter(Boolean))].sort();
+      const departments = getKnownValues("department");
       fillOptions(dom.deptFilter, ["全部部門", ...departments]);
       if (departments.includes(selected) || selected === "全部部門") dom.deptFilter.value = selected;
     }
 
+    function refreshTypeFilter() {
+      const selected = dom.typeFilter.value;
+      const types = getKnownValues("type", defaultAssetTypes);
+      fillOptions(dom.typeFilter, ["全部設備類型", ...types]);
+      if (types.includes(selected) || selected === "全部設備類型") dom.typeFilter.value = selected;
+    }
+
     function fillOptions(select, options) {
       select.innerHTML = options.map(option => `<option value="${escapeHtml(option)}">${escapeHtml(option)}</option>`).join("");
+    }
+
+    function refreshDatalists() {
+      fillDatalist("assetTypeList", getKnownValues("type", defaultAssetTypes));
+      fillDatalist("brandList", getKnownValues("brand"));
+      fillDatalist("modelList", getKnownValues("model"));
+      fillDatalist("departmentList", getKnownValues("department"));
+      fillDatalist("userList", getKnownValues("user"));
+      fillDatalist("locationList", getKnownValues("location"));
+      fillDatalist("ipList", getKnownValues("ip"));
+      fillDatalist("macList", getKnownValues("mac"));
+    }
+
+    function fillDatalist(id, values) {
+      const list = document.getElementById(id);
+      if (!list) return;
+      list.innerHTML = values.map(value => `<option value="${escapeHtml(value)}"></option>`).join("");
+    }
+
+    function getKnownValues(field, defaults = []) {
+      return [...new Set([
+        ...defaults,
+        ...state.assets.map(asset => asset[field]).filter(Boolean)
+      ])].sort((a, b) => String(a).localeCompare(String(b), "zh-Hant"));
     }
 
     function bindEvents() {
@@ -1299,12 +1404,16 @@
       document.querySelectorAll("[data-close-modal]").forEach(button => button.addEventListener("click", closeAssetModal));
       document.querySelectorAll("[data-close-import]").forEach(button => button.addEventListener("click", closeImportModal));
       document.querySelectorAll("[data-close-barcode]").forEach(button => button.addEventListener("click", closeBarcodeModal));
+      document.querySelectorAll("[data-close-detail]").forEach(button => button.addEventListener("click", closeAssetDetailModal));
       document.getElementById("openImportBtn").addEventListener("click", openImportModal);
       document.getElementById("importJsonBtn").addEventListener("click", importJson);
       document.getElementById("exportJsonBtn").addEventListener("click", exportJson);
       document.getElementById("exportCsvBtn").addEventListener("click", exportCsv);
       document.getElementById("downloadBarcodeBtn").addEventListener("click", downloadCurrentBarcode);
       document.getElementById("printBarcodeBtn").addEventListener("click", printCurrentBarcode);
+      document.getElementById("detailQrBtn").addEventListener("click", () => {
+        if (currentDetailAsset) openBarcodeModal(currentDetailAsset.id);
+      });
 
       dom.assetForm.addEventListener("submit", saveAssetFromForm);
       [dom.searchInput, dom.typeFilter, dom.statusFilter, dom.deptFilter].forEach(input => {
@@ -1322,6 +1431,10 @@
       dom.barcodeModal.addEventListener("click", event => {
         if (event.target === dom.barcodeModal) closeBarcodeModal();
       });
+
+      dom.assetDetailModal.addEventListener("click", event => {
+        if (event.target === dom.assetDetailModal) closeAssetDetailModal();
+      });
     }
 
     function switchTab(tabId, label) {
@@ -1332,7 +1445,9 @@
     }
 
     function renderAll() {
+      refreshTypeFilter();
       refreshDeptFilter();
+      refreshDatalists();
       renderStats();
       renderAssetTable();
       renderAnalytics();
@@ -1408,7 +1523,7 @@
           <td>${escapeHtml(asset.notes || "-")}</td>
           <td>
             <div class="actions">
-              <button class="btn icon" title="條碼" onclick="openBarcodeModal('${asset.id}')">▥</button>
+              <button class="btn icon" title="QR Code" onclick="openBarcodeModal('${asset.id}')">▦</button>
               <button class="btn icon" title="編輯" onclick="openEditModal('${asset.id}')">✎</button>
               <button class="btn icon danger" title="刪除" onclick="deleteAsset('${asset.id}')">×</button>
             </div>
@@ -1537,6 +1652,7 @@
       document.getElementById("assetId").value = "";
       document.getElementById("assetModalTitle").textContent = "新增設備";
       document.getElementById("assetStatus").value = "使用中";
+      document.getElementById("assetType").value = "";
       dom.assetModal.classList.add("open");
       document.getElementById("assetCode").focus();
     }
@@ -1548,7 +1664,7 @@
       document.getElementById("assetModalTitle").textContent = "編輯設備";
       document.getElementById("assetId").value = asset.id;
       document.getElementById("assetCode").value = asset.code || "";
-      document.getElementById("assetType").value = asset.type || assetTypes[0];
+      document.getElementById("assetType").value = asset.type || "";
       document.getElementById("assetStatus").value = asset.status || statuses[0];
       document.getElementById("brand").value = asset.brand || "";
       document.getElementById("model").value = asset.model || "";
@@ -1661,8 +1777,6 @@
       dom.importModal.classList.remove("open");
     }
 
-    let currentBarcodeAsset = null;
-
     function openBarcodeModal(id) {
       const asset = state.assets.find(item => item.id === id);
       if (!asset) return;
@@ -1675,30 +1789,49 @@
       dom.barcodeModal.classList.remove("open");
     }
 
-    function renderBarcodeLabel(asset) {
-      const barcodeValue = asset.code || asset.id;
-      const barcodeSvg = createCode128Svg(barcodeValue, 420, 112);
+    async function renderBarcodeLabel(asset) {
+      const qrUrl = getAssetDetailUrl(asset);
+      dom.barcodeLabel.innerHTML = `<div class="empty">QR Code 產生中...</div>`;
+      let qrImage = "";
+      try {
+        qrImage = await createQrDataUrl(qrUrl, 260);
+      } catch (error) {
+        console.error(error);
+        dom.barcodeLabel.innerHTML = `
+          <div class="barcode-company">美達食品工業股份有限公司｜資訊設備 QR Code</div>
+          <div class="empty">QR Code 產生失敗，請確認網路連線後重試。</div>
+          <div class="barcode-code">${escapeHtml(asset.code || asset.id)}</div>
+          <div class="qr-url">設備資訊連結：${escapeHtml(qrUrl)}</div>
+        `;
+        return;
+      }
       dom.barcodeLabel.innerHTML = `
-        <div class="barcode-company">美達食品工業股份有限公司｜資訊設備</div>
-        ${barcodeSvg}
-        <div class="barcode-code">${escapeHtml(barcodeValue)}</div>
+        <div class="barcode-company">美達食品工業股份有限公司｜資訊設備 QR Code</div>
+        <img src="${qrImage}" alt="設備 QR Code" width="260" height="260" />
+        <div class="barcode-code">${escapeHtml(asset.code || asset.id)}</div>
         <div class="barcode-meta">
           ${escapeHtml(asset.type)}｜${escapeHtml(asset.brand)} ${escapeHtml(asset.model)}<br>
           ${escapeHtml(asset.department || "未指定部門")} / ${escapeHtml(asset.user || "共用")} / ${escapeHtml(asset.location || "-")}
         </div>
+        <div class="qr-url">掃描後開啟：${escapeHtml(qrUrl)}</div>
       `;
     }
 
-    function downloadCurrentBarcode() {
+    async function downloadCurrentBarcode() {
       if (!currentBarcodeAsset) return;
-      const barcodeValue = currentBarcodeAsset.code || currentBarcodeAsset.id;
-      const svg = createCode128Svg(barcodeValue, 720, 190);
-      downloadFile(`barcode-${safeFilename(barcodeValue)}.svg`, svg, "image/svg+xml");
-      showToast("條碼 SVG 已下載。");
+      const qrUrl = getAssetDetailUrl(currentBarcodeAsset);
+      try {
+        const qrImage = await createQrDataUrl(qrUrl, 720);
+        downloadDataUrl(`qrcode-${safeFilename(currentBarcodeAsset.code || currentBarcodeAsset.id)}.png`, qrImage);
+        showToast("QR Code PNG 已下載。");
+      } catch (error) {
+        showToast("QR Code 產生失敗，請確認網路連線後重試。");
+      }
     }
 
-    function printCurrentBarcode() {
+    async function printCurrentBarcode() {
       if (!currentBarcodeAsset) return;
+      await renderBarcodeLabel(currentBarcodeAsset);
       const labelHtml = dom.barcodeLabel.innerHTML;
       const printWindow = window.open("", "_blank", "width=720,height=520");
       if (!printWindow) {
@@ -1710,14 +1843,15 @@
         <html lang="zh-Hant">
         <head>
           <meta charset="UTF-8">
-          <title>設備條碼 - ${escapeHtml(currentBarcodeAsset.code)}</title>
+          <title>設備 QR Code - ${escapeHtml(currentBarcodeAsset.code)}</title>
           <style>
             body { margin: 0; padding: 24px; font-family: "Segoe UI", "Microsoft JhengHei", Arial, sans-serif; }
             .barcode-label { width: 96mm; padding: 6mm; border: 1px solid #222; text-align: center; }
-            .barcode-label svg { display: block; width: 100%; height: auto; margin: 4mm auto; }
+            .barcode-label img { display: block; width: 52mm; height: 52mm; margin: 4mm auto; }
             .barcode-company { font-size: 10pt; font-weight: 800; }
             .barcode-code { margin-top: 3mm; font-size: 16pt; font-weight: 900; }
             .barcode-meta { margin-top: 2mm; color: #444; font-size: 9pt; line-height: 1.45; }
+            .qr-url { margin-top: 2mm; font-size: 7pt; color: #666; overflow-wrap: anywhere; }
             @media print {
               body { padding: 0; }
               .barcode-label { border: 0; page-break-inside: avoid; }
@@ -1732,6 +1866,271 @@
       printWindow.document.close();
       printWindow.focus();
       printWindow.print();
+    }
+
+    function getAssetDetailUrl(asset) {
+      const url = new URL(window.location.href);
+      url.searchParams.set("asset", asset.id);
+      url.hash = "";
+      return url.toString();
+    }
+
+    async function createQrDataUrl(value, width) {
+      const qr = makeQrMatrix(value);
+      const quiet = 4;
+      const modules = qr.size + quiet * 2;
+      const scale = Math.max(2, Math.floor(width / modules));
+      const canvas = document.createElement("canvas");
+      canvas.width = modules * scale;
+      canvas.height = modules * scale;
+      const ctx = canvas.getContext("2d");
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = "#111827";
+      for (let y = 0; y < qr.size; y += 1) {
+        for (let x = 0; x < qr.size; x += 1) {
+          if (qr.modules[y][x]) {
+            ctx.fillRect((x + quiet) * scale, (y + quiet) * scale, scale, scale);
+          }
+        }
+      }
+      return canvas.toDataURL("image/png");
+    }
+
+    function makeQrMatrix(value) {
+      const version = 6;
+      const size = 21 + (version - 1) * 4;
+      const dataCodewords = 136;
+      const blockCount = 2;
+      const blockDataLength = 68;
+      const eccLength = 18;
+      const bytes = new TextEncoder().encode(String(value));
+      if (bytes.length > 132) {
+        throw new Error("QR Code 內容太長，請縮短網址或設備 ID。");
+      }
+
+      const bits = [];
+      appendBits(bits, 0x4, 4);
+      appendBits(bits, bytes.length, 8);
+      bytes.forEach(byte => appendBits(bits, byte, 8));
+      appendBits(bits, 0, Math.min(4, dataCodewords * 8 - bits.length));
+      while (bits.length % 8) bits.push(0);
+
+      const data = [];
+      for (let i = 0; i < bits.length; i += 8) {
+        data.push(bits.slice(i, i + 8).reduce((acc, bit) => (acc << 1) | bit, 0));
+      }
+      for (let pad = 0; data.length < dataCodewords; pad += 1) {
+        data.push(pad % 2 === 0 ? 0xec : 0x11);
+      }
+
+      const blocks = [];
+      const eccBlocks = [];
+      for (let i = 0; i < blockCount; i += 1) {
+        const block = data.slice(i * blockDataLength, (i + 1) * blockDataLength);
+        blocks.push(block);
+        eccBlocks.push(reedSolomonRemainder(block, eccLength));
+      }
+
+      const finalCodewords = [];
+      for (let i = 0; i < blockDataLength; i += 1) {
+        for (let b = 0; b < blockCount; b += 1) finalCodewords.push(blocks[b][i]);
+      }
+      for (let i = 0; i < eccLength; i += 1) {
+        for (let b = 0; b < blockCount; b += 1) finalCodewords.push(eccBlocks[b][i]);
+      }
+
+      const modules = Array.from({ length: size }, () => Array(size).fill(false));
+      const reserved = Array.from({ length: size }, () => Array(size).fill(false));
+      const setModule = (x, y, dark, isReserved = true) => {
+        if (x < 0 || y < 0 || x >= size || y >= size) return;
+        modules[y][x] = Boolean(dark);
+        if (isReserved) reserved[y][x] = true;
+      };
+
+      drawFinder(setModule, 0, 0);
+      drawFinder(setModule, size - 7, 0);
+      drawFinder(setModule, 0, size - 7);
+      drawAlignment(setModule, 34, 34);
+      for (let i = 8; i < size - 8; i += 1) {
+        setModule(i, 6, i % 2 === 0);
+        setModule(6, i, i % 2 === 0);
+      }
+      setModule(8, 4 * version + 9, true);
+      drawFormatBits(setModule, size, 0);
+
+      const dataBits = finalCodewords.flatMap(byte => {
+        const out = [];
+        appendBits(out, byte, 8);
+        return out;
+      });
+      let bitIndex = 0;
+      let upward = true;
+      for (let right = size - 1; right >= 1; right -= 2) {
+        if (right === 6) right -= 1;
+        for (let vert = 0; vert < size; vert += 1) {
+          const y = upward ? size - 1 - vert : vert;
+          for (let j = 0; j < 2; j += 1) {
+            const x = right - j;
+            if (reserved[y][x]) continue;
+            const bit = bitIndex < dataBits.length ? dataBits[bitIndex] : 0;
+            const masked = Boolean(bit) !== ((x + y) % 2 === 0);
+            modules[y][x] = masked;
+            bitIndex += 1;
+          }
+        }
+        upward = !upward;
+      }
+
+      return { modules, size };
+    }
+
+    function appendBits(target, value, length) {
+      for (let i = length - 1; i >= 0; i -= 1) {
+        target.push((value >>> i) & 1);
+      }
+    }
+
+    function drawFinder(setModule, left, top) {
+      for (let y = -1; y <= 7; y += 1) {
+        for (let x = -1; x <= 7; x += 1) {
+          const xx = left + x;
+          const yy = top + y;
+          const dark = x >= 0 && x <= 6 && y >= 0 && y <= 6 &&
+            (x === 0 || x === 6 || y === 0 || y === 6 || (x >= 2 && x <= 4 && y >= 2 && y <= 4));
+          setModule(xx, yy, dark);
+        }
+      }
+    }
+
+    function drawAlignment(setModule, cx, cy) {
+      for (let y = -2; y <= 2; y += 1) {
+        for (let x = -2; x <= 2; x += 1) {
+          const dist = Math.max(Math.abs(x), Math.abs(y));
+          setModule(cx + x, cy + y, dist !== 1);
+        }
+      }
+    }
+
+    function drawFormatBits(setModule, size, mask) {
+      const bits = getFormatBits(1, mask);
+      for (let i = 0; i <= 5; i += 1) setModule(8, i, getBit(bits, i));
+      setModule(8, 7, getBit(bits, 6));
+      setModule(8, 8, getBit(bits, 7));
+      setModule(7, 8, getBit(bits, 8));
+      for (let i = 9; i < 15; i += 1) setModule(14 - i, 8, getBit(bits, i));
+      for (let i = 0; i < 8; i += 1) setModule(size - 1 - i, 8, getBit(bits, i));
+      for (let i = 8; i < 15; i += 1) setModule(8, size - 15 + i, getBit(bits, i));
+      setModule(8, size - 8, true);
+    }
+
+    function getFormatBits(errorCorrectionLevel, mask) {
+      const data = (errorCorrectionLevel << 3) | mask;
+      let rem = data << 10;
+      for (let i = 14; i >= 10; i -= 1) {
+        if (((rem >>> i) & 1) !== 0) rem ^= 0x537 << (i - 10);
+      }
+      return ((data << 10) | rem) ^ 0x5412;
+    }
+
+    function getBit(value, index) {
+      return ((value >>> index) & 1) !== 0;
+    }
+
+    function reedSolomonRemainder(data, degree) {
+      const generator = reedSolomonGenerator(degree).slice(1);
+      const result = Array(degree).fill(0);
+      for (const byte of data) {
+        const factor = byte ^ result.shift();
+        result.push(0);
+        for (let i = 0; i < degree; i += 1) {
+          result[i] ^= gfMultiply(generator[i], factor);
+        }
+      }
+      return result;
+    }
+
+    function reedSolomonGenerator(degree) {
+      let result = [1];
+      for (let i = 0; i < degree; i += 1) {
+        const next = Array(result.length + 1).fill(0);
+        for (let j = 0; j < result.length; j += 1) {
+          next[j] ^= result[j];
+          next[j + 1] ^= gfMultiply(result[j], gfPow(i));
+        }
+        result = next;
+      }
+      return result;
+    }
+
+    const gfExpTable = (() => {
+      const table = Array(255);
+      let x = 1;
+      for (let i = 0; i < 255; i += 1) {
+        table[i] = x;
+        x <<= 1;
+        if (x & 0x100) x ^= 0x11d;
+      }
+      return table;
+    })();
+
+    const gfLogTable = (() => {
+      const table = Array(256).fill(0);
+      gfExpTable.forEach((value, index) => { table[value] = index; });
+      return table;
+    })();
+
+    function gfPow(power) {
+      return gfExpTable[power % 255];
+    }
+
+    function gfMultiply(x, y) {
+      if (x === 0 || y === 0) return 0;
+      return gfExpTable[(gfLogTable[x] + gfLogTable[y]) % 255];
+    }
+
+    function openAssetDetailModal(asset) {
+      currentDetailAsset = asset;
+      document.getElementById("assetDetailTitle").textContent = `設備資訊｜${asset.code || asset.id}`;
+      dom.assetDetailContent.innerHTML = `
+        ${detailItem("設備編號", asset.code)}
+        ${detailItem("設備類型", asset.type)}
+        ${detailItem("品牌", asset.brand)}
+        ${detailItem("型號", asset.model)}
+        ${detailItem("使用部門", asset.department)}
+        ${detailItem("使用人", asset.user || "共用")}
+        ${detailItem("放置地點", asset.location)}
+        ${detailItem("狀態", asset.status)}
+        ${detailItem("IP 位址", asset.ip)}
+        ${detailItem("MAC 位址", asset.mac)}
+        ${detailItem("購買日期", formatDate(asset.purchaseDate))}
+        ${detailItem("保固到期日", formatDate(asset.warrantyDate))}
+        ${detailItem("備註", asset.notes || "-", "full")}
+      `;
+      dom.assetDetailModal.classList.add("open");
+    }
+
+    function closeAssetDetailModal() {
+      dom.assetDetailModal.classList.remove("open");
+    }
+
+    function detailItem(label, value, extraClass = "") {
+      return `
+        <div class="detail-item ${extraClass}">
+          <div class="detail-label">${escapeHtml(label)}</div>
+          <div class="detail-value">${escapeHtml(value || "-")}</div>
+        </div>
+      `;
+    }
+
+    function maybeOpenAssetFromUrl() {
+      if (state.openedAssetFromUrl) return;
+      const assetKey = new URLSearchParams(window.location.search).get("asset");
+      if (!assetKey) return;
+      const asset = state.assets.find(item => item.id === assetKey || item.code === assetKey);
+      if (!asset) return;
+      state.openedAssetFromUrl = true;
+      openAssetDetailModal(asset);
     }
 
     function createCode128Svg(value, width = 420, height = 112) {
@@ -1886,6 +2285,13 @@
       link.download = filename;
       link.click();
       URL.revokeObjectURL(url);
+    }
+
+    function downloadDataUrl(filename, dataUrl) {
+      const link = document.createElement("a");
+      link.href = dataUrl;
+      link.download = filename;
+      link.click();
     }
 
     function todayString() {
