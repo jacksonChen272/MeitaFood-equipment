@@ -20,14 +20,11 @@
       --amber-soft: #fff6dc;
       --red: #dc3545;
       --red-soft: #fde8eb;
-      --gray-soft: #eef3f7;
       --shadow: 0 18px 45px rgba(13, 45, 80, 0.12);
       --radius: 8px;
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
@@ -39,16 +36,8 @@
         linear-gradient(135deg, #f7fbff 0%, #edf6f3 45%, #eef5fb 100%);
     }
 
-    button,
-    input,
-    select,
-    textarea {
-      font: inherit;
-    }
-
-    button {
-      cursor: pointer;
-    }
+    button, input, select, textarea { font: inherit; }
+    button { cursor: pointer; }
 
     .app {
       display: grid;
@@ -87,10 +76,10 @@
     }
 
     .brand-logo {
+      display: block;
       width: 100%;
       height: 100%;
       object-fit: contain;
-      display: block;
     }
 
     .brand h1 {
@@ -156,7 +145,7 @@
 
     .topbar {
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       justify-content: space-between;
       gap: 16px;
       margin-bottom: 22px;
@@ -171,6 +160,61 @@
     .page-title p {
       margin: 7px 0 0;
       color: var(--muted);
+    }
+
+    .cloud-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 12px;
+      padding: 7px 10px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: #356385;
+      background: rgba(255, 255, 255, 0.78);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .cloud-status::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--amber);
+      box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.13);
+    }
+
+    .cloud-status.online {
+      color: #08724a;
+      border-color: #bde9d5;
+      background: #f0fbf6;
+    }
+
+    .cloud-status.online::before {
+      background: var(--green);
+      box-shadow: 0 0 0 3px rgba(17, 163, 106, 0.13);
+    }
+
+    .cloud-status.offline {
+      color: #a16207;
+      border-color: #f3d48f;
+      background: #fffaf0;
+    }
+
+    .cloud-status.offline::before {
+      background: var(--amber);
+    }
+
+    .cloud-status.error {
+      color: #b42331;
+      border-color: #f4bdc4;
+      background: #fff5f6;
+    }
+
+    .cloud-status.error::before {
+      background: var(--red);
+      box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.13);
     }
 
     .top-actions {
@@ -220,9 +264,7 @@
       padding: 0;
     }
 
-    .section {
-      display: none;
-    }
+    .section { display: none; }
 
     .section.active {
       display: block;
@@ -230,14 +272,8 @@
     }
 
     @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(6px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     .stats-grid {
@@ -247,8 +283,7 @@
       margin-bottom: 18px;
     }
 
-    .stat-card,
-    .panel {
+    .stat-card, .panel {
       border: 1px solid rgba(219, 230, 238, 0.86);
       border-radius: var(--radius);
       background: rgba(255, 255, 255, 0.92);
@@ -273,17 +308,9 @@
       background: var(--blue-soft);
     }
 
-    .stat-card.green::after {
-      background: var(--green-soft);
-    }
-
-    .stat-card.amber::after {
-      background: var(--amber-soft);
-    }
-
-    .stat-card.red::after {
-      background: var(--red-soft);
-    }
+    .stat-card.green::after { background: var(--green-soft); }
+    .stat-card.amber::after { background: var(--amber-soft); }
+    .stat-card.red::after { background: var(--red-soft); }
 
     .stat-label {
       color: var(--muted);
@@ -314,13 +341,9 @@
       gap: 18px;
     }
 
-    .full-width {
-      grid-column: 1 / -1;
-    }
+    .full-width { grid-column: 1 / -1; }
 
-    .panel {
-      padding: 18px;
-    }
+    .panel { padding: 18px; }
 
     .panel-head {
       display: flex;
@@ -358,9 +381,7 @@
       font-weight: 800;
     }
 
-    input,
-    select,
-    textarea {
+    input, select, textarea {
       width: 100%;
       min-height: 40px;
       border: 1px solid var(--line);
@@ -372,9 +393,7 @@
       transition: 0.18s ease;
     }
 
-    input:focus,
-    select:focus,
-    textarea:focus {
+    input:focus, select:focus, textarea:focus {
       border-color: #69a9ef;
       box-shadow: 0 0 0 3px rgba(23, 105, 209, 0.12);
     }
@@ -397,8 +416,7 @@
       border-collapse: collapse;
     }
 
-    th,
-    td {
+    th, td {
       padding: 13px 12px;
       border-bottom: 1px solid #edf2f6;
       text-align: left;
@@ -417,9 +435,7 @@
       letter-spacing: 0;
     }
 
-    tbody tr:hover {
-      background: #f7fbff;
-    }
+    tbody tr:hover { background: #f7fbff; }
 
     .asset-main {
       display: grid;
@@ -542,9 +558,7 @@
       background: #fff5f6;
     }
 
-    .alert-title {
-      font-weight: 900;
-    }
+    .alert-title { font-weight: 900; }
 
     .alert-detail {
       margin-top: 4px;
@@ -573,9 +587,7 @@
       backdrop-filter: blur(6px);
     }
 
-    .modal.open {
-      display: flex;
-    }
+    .modal.open { display: flex; }
 
     .modal-card {
       width: min(980px, 100%);
@@ -586,8 +598,7 @@
       box-shadow: 0 28px 70px rgba(0, 0, 0, 0.28);
     }
 
-    .modal-head,
-    .modal-foot {
+    .modal-head, .modal-foot {
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -614,9 +625,7 @@
       padding: 20px;
     }
 
-    .span-3 {
-      grid-column: span 3;
-    }
+    .span-3 { grid-column: span 3; }
 
     .import-box {
       display: grid;
@@ -649,64 +658,28 @@
     }
 
     @media (max-width: 1100px) {
-      .app {
-        grid-template-columns: 1fr;
-      }
-
+      .app { grid-template-columns: 1fr; }
       .sidebar {
         position: static;
         height: auto;
       }
-
-      .nav {
-        grid-template-columns: repeat(4, minmax(0, 1fr));
-      }
-
-      .stats-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-
-      .grid-2,
-      .toolbar {
-        grid-template-columns: 1fr;
-      }
+      .nav { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+      .stats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .grid-2, .toolbar { grid-template-columns: 1fr; }
     }
 
     @media (max-width: 720px) {
-      main {
-        padding: 18px;
-      }
-
-      .topbar,
-      .panel-head {
+      main { padding: 18px; }
+      .topbar, .panel-head {
         align-items: stretch;
         flex-direction: column;
       }
-
-      .top-actions {
-        justify-content: stretch;
-      }
-
-      .top-actions .btn {
-        flex: 1 1 150px;
-      }
-
-      .nav {
-        grid-template-columns: 1fr 1fr;
-      }
-
-      .stats-grid,
-      .form-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .span-3 {
-        grid-column: auto;
-      }
-
-      .page-title h2 {
-        font-size: 23px;
-      }
+      .top-actions { justify-content: stretch; }
+      .top-actions .btn { flex: 1 1 150px; }
+      .nav { grid-template-columns: 1fr 1fr; }
+      .stats-grid, .form-grid { grid-template-columns: 1fr; }
+      .span-3 { grid-column: auto; }
+      .page-title h2 { font-size: 23px; }
     }
   </style>
 </head>
@@ -727,7 +700,7 @@
         <button data-tab="reminders"><span class="nav-icon">!</span>保固與維修提醒</button>
       </nav>
       <div class="sidebar-foot">
-        資料目前儲存在本機瀏覽器 localStorage。匯入 JSON 會覆蓋現有資料，建議先匯出備份。
+        Firestore 是主要資料庫，localStorage 僅保存最近一次快取。Firebase 尚未設定或網路中斷時，系統會進入離線模式。
       </div>
     </aside>
 
@@ -736,6 +709,7 @@
         <div class="page-title">
           <h2 id="pageTitle">儀表板總覽</h2>
           <p>食品公司資訊部門設備盤點、維修追蹤與保固提醒</p>
+          <div class="cloud-status offline" id="cloudStatus">離線模式：使用本機快取</div>
         </div>
         <div class="top-actions">
           <button class="btn primary" id="addAssetBtn">＋ 新增設備</button>
@@ -935,7 +909,7 @@
         <button class="btn icon" type="button" data-close-import>×</button>
       </div>
       <div class="import-box">
-        <p class="panel-subtitle">請選擇由本系統匯出的 JSON 檔，匯入後會覆蓋目前 localStorage 資料。</p>
+        <p class="panel-subtitle">請選擇由本系統匯出的 JSON 檔。匯入後會覆蓋 Firestore collection：it_assets，離線時只會更新本機快取。</p>
         <input class="file-input" id="importFile" type="file" accept="application/json,.json" />
       </div>
       <div class="modal-foot">
@@ -947,8 +921,22 @@
 
   <div class="toast" id="toast"></div>
 
-  <script>
-    const STORAGE_KEY = "meita-it-assets-v1";
+  <script type="module">
+    const STORAGE_KEY = "meita-it-assets-cache-v2";
+    const LEGACY_STORAGE_KEY = "meita-it-assets-v1";
+    const COLLECTION_NAME = "it_assets";
+
+    // Firebase 設定區：請將 Firebase Console 提供的設定貼在這裡。
+    // Firestore collection 固定使用 it_assets。
+    const firebaseConfig = {
+      apiKey: "",
+      authDomain: "",
+      projectId: "",
+      storageBucket: "",
+      messagingSenderId: "",
+      appId: ""
+    };
+
     const assetTypes = ["桌上型電腦", "筆記型電腦", "印表機", "交換器", "無線 AP", "NAS", "掃描器", "網路設備", "其他"];
     const statuses = ["使用中", "維修中", "閒置", "報廢"];
 
@@ -1083,11 +1071,19 @@
       }
     ];
 
-    let assets = loadAssets();
-    let editingId = null;
+    const state = {
+      assets: loadLocalCache(),
+      editingId: null,
+      db: null,
+      firestore: null,
+      unsubscribe: null,
+      cloudReady: false,
+      firstCloudSnapshot: true
+    };
 
     const dom = {
       pageTitle: document.getElementById("pageTitle"),
+      cloudStatus: document.getElementById("cloudStatus"),
       statsGrid: document.getElementById("statsGrid"),
       assetTable: document.getElementById("assetTable"),
       resultCount: document.getElementById("resultCount"),
@@ -1108,6 +1104,7 @@
       fillSelects();
       bindEvents();
       renderAll();
+      initFirebase();
     }
 
     function nextDate(days) {
@@ -1121,22 +1118,93 @@
       return `asset-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
     }
 
-    function loadAssets() {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      if (!saved) {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(defaultAssets));
-        return [...defaultAssets];
+    function isFirebaseConfigured() {
+      return Boolean(firebaseConfig.apiKey && firebaseConfig.projectId && firebaseConfig.appId);
+    }
+
+    async function initFirebase() {
+      if (!isFirebaseConfigured()) {
+        setCloudStatus("offline", "離線模式：請先貼上 Firebase 設定");
+        return;
       }
+
       try {
-        const parsed = JSON.parse(saved);
-        return Array.isArray(parsed) ? parsed : [...defaultAssets];
-      } catch {
-        return [...defaultAssets];
+        setCloudStatus("offline", "正在連線雲端資料庫...");
+        const appModule = await import("https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js");
+        const firestoreModule = await import("https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js");
+        const app = appModule.initializeApp(firebaseConfig);
+        state.db = firestoreModule.getFirestore(app);
+        state.firestore = firestoreModule;
+        state.cloudReady = true;
+        listenToAssets();
+      } catch (error) {
+        console.error(error);
+        setCloudStatus("error", "離線模式：Firebase 載入失敗");
+        showToast("Firebase 連線失敗，已使用本機快取。");
       }
     }
 
-    function saveAssets() {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(assets));
+    function listenToAssets() {
+      const { collection, onSnapshot, query, orderBy } = state.firestore;
+      const assetsQuery = query(collection(state.db, COLLECTION_NAME), orderBy("code", "asc"));
+
+      state.unsubscribe = onSnapshot(
+        assetsQuery,
+        async snapshot => {
+          setCloudStatus("online", snapshot.metadata.fromCache ? "已連線雲端資料庫：使用快取同步中" : "已連線雲端資料庫");
+          const cloudAssets = snapshot.docs.map(doc => normalizeImportedAsset({ id: doc.id, ...doc.data() }));
+
+          if (snapshot.empty && state.firstCloudSnapshot) {
+            state.firstCloudSnapshot = false;
+            await seedDefaultAssetsIfCloudEmpty();
+            return;
+          }
+
+          state.firstCloudSnapshot = false;
+          state.assets = cloudAssets;
+          saveLocalCache();
+          renderAll();
+        },
+        error => {
+          console.error(error);
+          state.cloudReady = false;
+          setCloudStatus("error", "離線模式：Firestore 讀取失敗");
+          showToast("Firestore 讀取失敗，已保留本機快取。");
+        }
+      );
+    }
+
+    async function seedDefaultAssetsIfCloudEmpty() {
+      const cached = readCacheArray();
+      const seedAssets = cached.length ? cached : defaultAssets;
+      await replaceCloudAssets(seedAssets);
+      showToast(`雲端資料庫已初始化，共 ${seedAssets.length} 筆設備。`);
+    }
+
+    function loadLocalCache() {
+      const cached = readCacheArray();
+      if (cached.length) return cached;
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(defaultAssets));
+      return [...defaultAssets];
+    }
+
+    function readCacheArray() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY) || localStorage.getItem(LEGACY_STORAGE_KEY) || "[]";
+        const parsed = JSON.parse(raw);
+        return Array.isArray(parsed) ? parsed.map(normalizeImportedAsset) : [];
+      } catch {
+        return [];
+      }
+    }
+
+    function saveLocalCache() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state.assets));
+    }
+
+    function setCloudStatus(kind, text) {
+      dom.cloudStatus.className = `cloud-status ${kind}`;
+      dom.cloudStatus.textContent = text;
     }
 
     function fillSelects() {
@@ -1149,9 +1217,9 @@
 
     function refreshDeptFilter() {
       const selected = dom.deptFilter.value;
-      const departments = [...new Set(assets.map(asset => asset.department).filter(Boolean))].sort();
+      const departments = [...new Set(state.assets.map(asset => asset.department).filter(Boolean))].sort();
       fillOptions(dom.deptFilter, ["全部部門", ...departments]);
-      if (departments.includes(selected)) dom.deptFilter.value = selected;
+      if (departments.includes(selected) || selected === "全部部門") dom.deptFilter.value = selected;
     }
 
     function fillOptions(select, options) {
@@ -1225,18 +1293,18 @@
       document.getElementById("dashboardTypeBars").innerHTML = makeBars(countBy("type"));
       document.getElementById("dashboardAlerts").innerHTML = makeAlertItems([
         ...getWarrantySoon(),
-        ...assets.filter(asset => asset.status === "維修中")
+        ...state.assets.filter(asset => asset.status === "維修中")
       ].slice(0, 6), "目前沒有近期警示。");
     }
 
     function getStats() {
       const status = countBy("status");
       return {
-        total: assets.length,
-        computers: assets.filter(asset => ["桌上型電腦", "筆記型電腦"].includes(asset.type)).length,
-        laptops: assets.filter(asset => asset.type === "筆記型電腦").length,
-        printers: assets.filter(asset => asset.type === "印表機").length,
-        networks: assets.filter(asset => ["交換器", "無線 AP", "NAS", "網路設備"].includes(asset.type)).length,
+        total: state.assets.length,
+        computers: state.assets.filter(asset => ["桌上型電腦", "筆記型電腦"].includes(asset.type)).length,
+        laptops: state.assets.filter(asset => asset.type === "筆記型電腦").length,
+        printers: state.assets.filter(asset => asset.type === "印表機").length,
+        networks: state.assets.filter(asset => ["交換器", "無線 AP", "NAS", "網路設備"].includes(asset.type)).length,
         status,
         warrantySoon: getWarrantySoon().length
       };
@@ -1283,7 +1351,7 @@
       const status = dom.statusFilter.value;
       const dept = dom.deptFilter.value;
 
-      return assets.filter(asset => {
+      return state.assets.filter(asset => {
         const searchable = Object.values(asset).join(" ").toLowerCase();
         const matchKeyword = !keyword || searchable.includes(keyword);
         const matchType = type === "全部設備類型" || asset.type === type;
@@ -1302,8 +1370,8 @@
 
     function renderReminders() {
       const warrantySoon = getWarrantySoon();
-      const repairing = assets.filter(asset => asset.status === "維修中");
-      const retired = assets.filter(asset => asset.status === "報廢");
+      const repairing = state.assets.filter(asset => asset.status === "維修中");
+      const retired = state.assets.filter(asset => asset.status === "報廢");
 
       document.getElementById("warrantyCount").textContent = `${warrantySoon.length} 筆`;
       document.getElementById("repairCount").textContent = `${repairing.length} 筆`;
@@ -1314,7 +1382,7 @@
     }
 
     function countBy(key) {
-      return assets.reduce((acc, asset) => {
+      return state.assets.reduce((acc, asset) => {
         const value = asset[key] || "未指定";
         acc[value] = (acc[value] || 0) + 1;
         return acc;
@@ -1340,7 +1408,7 @@
       const today = stripTime(new Date());
       const limit = new Date(today);
       limit.setDate(limit.getDate() + 30);
-      return assets
+      return state.assets
         .filter(asset => {
           if (!asset.warrantyDate || asset.status === "報廢") return false;
           const warranty = stripTime(new Date(asset.warrantyDate));
@@ -1392,7 +1460,7 @@
     }
 
     function openCreateModal() {
-      editingId = null;
+      state.editingId = null;
       dom.assetForm.reset();
       document.getElementById("assetId").value = "";
       document.getElementById("assetModalTitle").textContent = "新增設備";
@@ -1402,9 +1470,9 @@
     }
 
     function openEditModal(id) {
-      const asset = assets.find(item => item.id === id);
+      const asset = state.assets.find(item => item.id === id);
       if (!asset) return;
-      editingId = id;
+      state.editingId = id;
       document.getElementById("assetModalTitle").textContent = "編輯設備";
       document.getElementById("assetId").value = asset.id;
       document.getElementById("assetCode").value = asset.code || "";
@@ -1428,10 +1496,10 @@
       dom.assetModal.classList.remove("open");
     }
 
-    function saveAssetFromForm(event) {
+    async function saveAssetFromForm(event) {
       event.preventDefault();
-      const payload = {
-        id: editingId || makeId(),
+      const payload = normalizeImportedAsset({
+        id: state.editingId || makeId(),
         code: document.getElementById("assetCode").value.trim(),
         type: document.getElementById("assetType").value,
         brand: document.getElementById("brand").value.trim(),
@@ -1445,35 +1513,71 @@
         warrantyDate: document.getElementById("warrantyDate").value,
         status: document.getElementById("assetStatus").value,
         notes: document.getElementById("notes").value.trim()
-      };
+      });
 
-      const duplicate = assets.some(asset => asset.code === payload.code && asset.id !== payload.id);
+      const duplicate = state.assets.some(asset => asset.code === payload.code && asset.id !== payload.id);
       if (duplicate) {
         showToast("設備編號已存在，請改用其他編號。");
         return;
       }
 
-      if (editingId) {
-        assets = assets.map(asset => asset.id === editingId ? payload : asset);
-        showToast("設備資料已更新。");
-      } else {
-        assets.unshift(payload);
-        showToast("已新增設備。");
-      }
-
-      saveAssets();
+      const wasEditing = Boolean(state.editingId);
+      await upsertAsset(payload);
       closeAssetModal();
-      renderAll();
+      showToast(wasEditing ? "設備資料已同步更新。" : "已新增設備並同步雲端。");
     }
 
-    function deleteAsset(id) {
-      const asset = assets.find(item => item.id === id);
+    async function deleteAsset(id) {
+      const asset = state.assets.find(item => item.id === id);
       if (!asset) return;
-      if (!confirm(`確定要刪除「${asset.code}」嗎？此動作無法復原。`)) return;
-      assets = assets.filter(item => item.id !== id);
-      saveAssets();
-      renderAll();
+      if (!confirm(`確定要刪除「${asset.code}」嗎？此動作會同步刪除雲端資料。`)) return;
+      await removeAsset(id);
       showToast("設備已刪除。");
+    }
+
+    async function upsertAsset(asset) {
+      state.assets = state.assets.some(item => item.id === asset.id)
+        ? state.assets.map(item => item.id === asset.id ? asset : item)
+        : [asset, ...state.assets];
+      saveLocalCache();
+      renderAll();
+
+      if (!state.cloudReady) {
+        setCloudStatus("offline", "離線模式：已更新本機快取");
+        return;
+      }
+
+      try {
+        const { doc, setDoc, serverTimestamp } = state.firestore;
+        await setDoc(doc(state.db, COLLECTION_NAME, asset.id), {
+          ...asset,
+          updatedAt: serverTimestamp()
+        });
+      } catch (error) {
+        console.error(error);
+        setCloudStatus("error", "離線模式：寫入雲端失敗");
+        showToast("雲端寫入失敗，已保留本機快取。");
+      }
+    }
+
+    async function removeAsset(id) {
+      state.assets = state.assets.filter(item => item.id !== id);
+      saveLocalCache();
+      renderAll();
+
+      if (!state.cloudReady) {
+        setCloudStatus("offline", "離線模式：已更新本機快取");
+        return;
+      }
+
+      try {
+        const { doc, deleteDoc } = state.firestore;
+        await deleteDoc(doc(state.db, COLLECTION_NAME, id));
+      } catch (error) {
+        console.error(error);
+        setCloudStatus("error", "離線模式：刪除雲端失敗");
+        showToast("雲端刪除失敗，請稍後重試。");
+      }
     }
 
     function openImportModal() {
@@ -1493,15 +1597,14 @@
       }
 
       const reader = new FileReader();
-      reader.onload = () => {
+      reader.onload = async () => {
         try {
           const data = JSON.parse(reader.result);
           if (!Array.isArray(data)) throw new Error("JSON 必須是設備陣列");
-          assets = data.map(normalizeImportedAsset);
-          saveAssets();
+          const imported = data.map(normalizeImportedAsset);
+          await replaceAllAssets(imported);
           closeImportModal();
-          renderAll();
-          showToast(`匯入完成，共 ${assets.length} 筆設備。`);
+          showToast(`匯入完成，共 ${imported.length} 筆設備。`);
         } catch (error) {
           showToast(`匯入失敗：${error.message}`);
         }
@@ -1509,9 +1612,44 @@
       reader.readAsText(file, "utf-8");
     }
 
+    async function replaceAllAssets(nextAssets) {
+      state.assets = nextAssets;
+      saveLocalCache();
+      renderAll();
+
+      if (!state.cloudReady) {
+        setCloudStatus("offline", "離線模式：匯入已保存到本機快取");
+        return;
+      }
+
+      try {
+        await replaceCloudAssets(nextAssets);
+      } catch (error) {
+        console.error(error);
+        setCloudStatus("error", "離線模式：匯入雲端失敗");
+        showToast("匯入雲端失敗，已保留本機快取。");
+      }
+    }
+
+    async function replaceCloudAssets(nextAssets) {
+      if (!state.cloudReady) return;
+      const { collection, getDocs, writeBatch, doc, serverTimestamp } = state.firestore;
+      const batch = writeBatch(state.db);
+      const snapshot = await getDocs(collection(state.db, COLLECTION_NAME));
+      snapshot.forEach(item => batch.delete(item.ref));
+      nextAssets.forEach(asset => {
+        batch.set(doc(state.db, COLLECTION_NAME, asset.id), {
+          ...asset,
+          updatedAt: serverTimestamp()
+        });
+      });
+      await batch.commit();
+    }
+
     function normalizeImportedAsset(asset) {
+      const rawStatus = asset.status || asset["狀態"];
       return {
-        id: asset.id || makeId(),
+        id: String(asset.id || makeId()),
         code: String(asset.code || asset["設備編號"] || "").trim(),
         type: String(asset.type || asset["設備類型"] || "其他").trim(),
         brand: String(asset.brand || asset["品牌"] || "").trim(),
@@ -1523,19 +1661,19 @@
         mac: String(asset.mac || asset["MAC 位址"] || "").trim(),
         purchaseDate: asset.purchaseDate || asset["購買日期"] || "",
         warrantyDate: asset.warrantyDate || asset["保固到期日"] || "",
-        status: statuses.includes(asset.status || asset["狀態"]) ? (asset.status || asset["狀態"]) : "使用中",
+        status: statuses.includes(rawStatus) ? rawStatus : "使用中",
         notes: String(asset.notes || asset["備註"] || "").trim()
       };
     }
 
     function exportJson() {
-      downloadFile(`meita-assets-${todayString()}.json`, JSON.stringify(assets, null, 2), "application/json");
+      downloadFile(`meita-assets-${todayString()}.json`, JSON.stringify(state.assets, null, 2), "application/json");
       showToast("JSON 已匯出。");
     }
 
     function exportCsv() {
       const headers = ["設備編號", "設備類型", "品牌", "型號", "使用部門", "使用人", "放置地點", "IP 位址", "MAC 位址", "購買日期", "保固到期日", "狀態", "備註"];
-      const rows = assets.map(asset => [
+      const rows = state.assets.map(asset => [
         asset.code, asset.type, asset.brand, asset.model, asset.department, asset.user, asset.location,
         asset.ip, asset.mac, asset.purchaseDate, asset.warrantyDate, asset.status, asset.notes
       ]);
