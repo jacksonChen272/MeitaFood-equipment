@@ -1,0 +1,1590 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>美達資訊設備管理平台｜Meita IT Asset Dashboard</title>
+  <style>
+    :root {
+      --bg: #f4f8fb;
+      --panel: #ffffff;
+      --ink: #122033;
+      --muted: #6c7a89;
+      --line: #dbe6ee;
+      --blue: #1769d1;
+      --blue-dark: #0b2e59;
+      --blue-soft: #e7f1ff;
+      --green: #11a36a;
+      --green-soft: #e4f8ef;
+      --amber: #f59e0b;
+      --amber-soft: #fff6dc;
+      --red: #dc3545;
+      --red-soft: #fde8eb;
+      --gray-soft: #eef3f7;
+      --shadow: 0 18px 45px rgba(13, 45, 80, 0.12);
+      --radius: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      font-family: "Segoe UI", "Microsoft JhengHei", Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(17, 163, 106, 0.16), transparent 28rem),
+        linear-gradient(135deg, #f7fbff 0%, #edf6f3 45%, #eef5fb 100%);
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .app {
+      display: grid;
+      grid-template-columns: 272px 1fr;
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      padding: 24px 20px;
+      color: #fff;
+      background:
+        linear-gradient(160deg, rgba(6, 31, 62, 0.98), rgba(11, 75, 105, 0.96) 52%, rgba(7, 109, 80, 0.96)),
+        #0b2e59;
+      overflow-y: auto;
+    }
+
+    .brand {
+      padding-bottom: 24px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.16);
+    }
+
+    .brand-mark {
+      display: inline-grid;
+      place-items: center;
+      width: 74px;
+      height: 74px;
+      margin-bottom: 14px;
+      border-radius: var(--radius);
+      background: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.42);
+      padding: 7px;
+      box-shadow: 0 14px 30px rgba(0, 0, 0, 0.18);
+    }
+
+    .brand-logo {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: 20px;
+      line-height: 1.35;
+      letter-spacing: 0;
+    }
+
+    .brand p {
+      margin: 8px 0 0;
+      color: rgba(255, 255, 255, 0.75);
+      font-size: 13px;
+    }
+
+    .nav {
+      display: grid;
+      gap: 10px;
+      margin-top: 24px;
+    }
+
+    .nav button {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid transparent;
+      border-radius: var(--radius);
+      color: rgba(255, 255, 255, 0.78);
+      background: transparent;
+      text-align: left;
+      transition: 0.2s ease;
+    }
+
+    .nav button:hover,
+    .nav button.active {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.12);
+      border-color: rgba(255, 255, 255, 0.14);
+    }
+
+    .nav-icon {
+      width: 24px;
+      text-align: center;
+    }
+
+    .sidebar-foot {
+      margin-top: 28px;
+      padding: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.08);
+      color: rgba(255, 255, 255, 0.78);
+      font-size: 12px;
+      line-height: 1.7;
+    }
+
+    main {
+      min-width: 0;
+      padding: 28px;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 22px;
+    }
+
+    .page-title h2 {
+      margin: 0;
+      font-size: 28px;
+      letter-spacing: 0;
+    }
+
+    .page-title p {
+      margin: 7px 0 0;
+      color: var(--muted);
+    }
+
+    .top-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: flex-end;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 40px;
+      padding: 9px 14px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      color: var(--ink);
+      background: #fff;
+      transition: 0.2s ease;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      border-color: #b8cce0;
+      box-shadow: 0 10px 22px rgba(13, 45, 80, 0.1);
+    }
+
+    .btn.primary {
+      color: #fff;
+      border-color: transparent;
+      background: linear-gradient(135deg, var(--blue), var(--green));
+      box-shadow: 0 12px 24px rgba(23, 105, 209, 0.22);
+    }
+
+    .btn.danger {
+      color: var(--red);
+      border-color: #f4bdc4;
+      background: #fff;
+    }
+
+    .btn.icon {
+      width: 40px;
+      padding: 0;
+    }
+
+    .section {
+      display: none;
+    }
+
+    .section.active {
+      display: block;
+      animation: fadeIn 0.22s ease;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(6px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .stat-card,
+    .panel {
+      border: 1px solid rgba(219, 230, 238, 0.86);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.92);
+      box-shadow: var(--shadow);
+    }
+
+    .stat-card {
+      position: relative;
+      min-height: 128px;
+      padding: 18px;
+      overflow: hidden;
+    }
+
+    .stat-card::after {
+      content: "";
+      position: absolute;
+      right: -34px;
+      bottom: -34px;
+      width: 105px;
+      height: 105px;
+      border-radius: 50%;
+      background: var(--blue-soft);
+    }
+
+    .stat-card.green::after {
+      background: var(--green-soft);
+    }
+
+    .stat-card.amber::after {
+      background: var(--amber-soft);
+    }
+
+    .stat-card.red::after {
+      background: var(--red-soft);
+    }
+
+    .stat-label {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .stat-value {
+      position: relative;
+      z-index: 1;
+      margin-top: 14px;
+      font-size: 34px;
+      font-weight: 800;
+      letter-spacing: 0;
+    }
+
+    .stat-note {
+      position: relative;
+      z-index: 1;
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(320px, 0.8fr);
+      gap: 18px;
+    }
+
+    .full-width {
+      grid-column: 1 / -1;
+    }
+
+    .panel {
+      padding: 18px;
+    }
+
+    .panel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .panel h3 {
+      margin: 0;
+      font-size: 18px;
+    }
+
+    .panel-subtitle {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .toolbar {
+      display: grid;
+      grid-template-columns: minmax(220px, 1.4fr) repeat(3, minmax(150px, 0.8fr));
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .field {
+      display: grid;
+      gap: 7px;
+    }
+
+    label {
+      color: #39506a;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      min-height: 40px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+      color: var(--ink);
+      padding: 9px 11px;
+      outline: none;
+      transition: 0.18s ease;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: #69a9ef;
+      box-shadow: 0 0 0 3px rgba(23, 105, 209, 0.12);
+    }
+
+    textarea {
+      min-height: 82px;
+      resize: vertical;
+    }
+
+    .table-wrap {
+      overflow: auto;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+    }
+
+    table {
+      width: 100%;
+      min-width: 1100px;
+      border-collapse: collapse;
+    }
+
+    th,
+    td {
+      padding: 13px 12px;
+      border-bottom: 1px solid #edf2f6;
+      text-align: left;
+      vertical-align: middle;
+      font-size: 14px;
+    }
+
+    th {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      color: #38516d;
+      background: #f7fafc;
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 0;
+    }
+
+    tbody tr:hover {
+      background: #f7fbff;
+    }
+
+    .asset-main {
+      display: grid;
+      gap: 3px;
+      min-width: 170px;
+    }
+
+    .asset-code {
+      font-weight: 800;
+      color: var(--blue-dark);
+    }
+
+    .asset-model {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      min-height: 26px;
+      padding: 4px 9px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .badge.using {
+      color: #08724a;
+      background: var(--green-soft);
+    }
+
+    .badge.repair {
+      color: #a16207;
+      background: var(--amber-soft);
+    }
+
+    .badge.idle {
+      color: #356385;
+      background: #e7f3fb;
+    }
+
+    .badge.retired {
+      color: #b42331;
+      background: var(--red-soft);
+    }
+
+    .badge.warn {
+      color: #a16207;
+      background: var(--amber-soft);
+    }
+
+    .badge.type {
+      color: #155fae;
+      background: var(--blue-soft);
+    }
+
+    .actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .progress-list {
+      display: grid;
+      gap: 14px;
+    }
+
+    .progress-row {
+      display: grid;
+      gap: 7px;
+    }
+
+    .progress-meta {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      color: #334a64;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .bar {
+      height: 10px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: #edf3f8;
+    }
+
+    .bar span {
+      display: block;
+      height: 100%;
+      min-width: 5px;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--blue), var(--green));
+    }
+
+    .alert-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .alert-item {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 8px;
+      padding: 12px;
+      border: 1px solid #f4d39a;
+      border-radius: var(--radius);
+      background: #fffaf0;
+    }
+
+    .alert-item.repairing {
+      border-color: #bed8ef;
+      background: #f2f8ff;
+    }
+
+    .alert-item.retired {
+      border-color: #f2b4bd;
+      background: #fff5f6;
+    }
+
+    .alert-title {
+      font-weight: 900;
+    }
+
+    .alert-detail {
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .empty {
+      padding: 24px;
+      color: var(--muted);
+      text-align: center;
+      border: 1px dashed var(--line);
+      border-radius: var(--radius);
+      background: #fbfdff;
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      z-index: 20;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: rgba(7, 25, 45, 0.58);
+      backdrop-filter: blur(6px);
+    }
+
+    .modal.open {
+      display: flex;
+    }
+
+    .modal-card {
+      width: min(980px, 100%);
+      max-height: 92vh;
+      overflow: auto;
+      border-radius: var(--radius);
+      background: #fff;
+      box-shadow: 0 28px 70px rgba(0, 0, 0, 0.28);
+    }
+
+    .modal-head,
+    .modal-foot {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .modal-foot {
+      justify-content: flex-end;
+      border-top: 1px solid var(--line);
+      border-bottom: 0;
+    }
+
+    .modal-head h3 {
+      margin: 0;
+      font-size: 20px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      padding: 20px;
+    }
+
+    .span-3 {
+      grid-column: span 3;
+    }
+
+    .import-box {
+      display: grid;
+      gap: 12px;
+      padding: 20px;
+    }
+
+    .toast {
+      position: fixed;
+      right: 22px;
+      bottom: 22px;
+      z-index: 30;
+      display: none;
+      max-width: min(420px, calc(100vw - 44px));
+      padding: 13px 15px;
+      border-radius: var(--radius);
+      color: #fff;
+      background: #0f3d69;
+      box-shadow: var(--shadow);
+    }
+
+    .toast.show {
+      display: block;
+      animation: fadeIn 0.2s ease;
+    }
+
+    .file-input {
+      padding: 9px;
+      background: #f9fbfd;
+    }
+
+    @media (max-width: 1100px) {
+      .app {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        position: static;
+        height: auto;
+      }
+
+      .nav {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+
+      .stats-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .grid-2,
+      .toolbar {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 720px) {
+      main {
+        padding: 18px;
+      }
+
+      .topbar,
+      .panel-head {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .top-actions {
+        justify-content: stretch;
+      }
+
+      .top-actions .btn {
+        flex: 1 1 150px;
+      }
+
+      .nav {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .stats-grid,
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .span-3 {
+        grid-column: auto;
+      }
+
+      .page-title h2 {
+        font-size: 23px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark">
+          <img class="brand-logo" src="meita-logo.jpg" alt="美達食品工業股份有限公司 Logo" />
+        </div>
+        <h1>美達食品工業股份有限公司</h1>
+        <p>美達資訊設備管理平台<br />Meita IT Asset Dashboard</p>
+      </div>
+      <nav class="nav" aria-label="主要功能">
+        <button class="active" data-tab="dashboard"><span class="nav-icon">◆</span>儀表板總覽</button>
+        <button data-tab="assets"><span class="nav-icon">▦</span>設備資料管理</button>
+        <button data-tab="analytics"><span class="nav-icon">▰</span>統計分析</button>
+        <button data-tab="reminders"><span class="nav-icon">!</span>保固與維修提醒</button>
+      </nav>
+      <div class="sidebar-foot">
+        資料目前儲存在本機瀏覽器 localStorage。匯入 JSON 會覆蓋現有資料，建議先匯出備份。
+      </div>
+    </aside>
+
+    <main>
+      <header class="topbar">
+        <div class="page-title">
+          <h2 id="pageTitle">儀表板總覽</h2>
+          <p>食品公司資訊部門設備盤點、維修追蹤與保固提醒</p>
+        </div>
+        <div class="top-actions">
+          <button class="btn primary" id="addAssetBtn">＋ 新增設備</button>
+          <button class="btn" id="exportJsonBtn">匯出 JSON</button>
+          <button class="btn" id="exportCsvBtn">匯出 CSV</button>
+          <button class="btn" id="openImportBtn">匯入 JSON</button>
+        </div>
+      </header>
+
+      <section class="section active" id="dashboard">
+        <div class="stats-grid" id="statsGrid"></div>
+        <div class="grid-2">
+          <div class="panel">
+            <div class="panel-head">
+              <h3>設備類型分布</h3>
+              <span class="panel-subtitle">依目前資料即時統計</span>
+            </div>
+            <div class="progress-list" id="dashboardTypeBars"></div>
+          </div>
+          <div class="panel">
+            <div class="panel-head">
+              <h3>近期警示</h3>
+              <span class="panel-subtitle">保固 30 天內與維修中</span>
+            </div>
+            <div class="alert-list" id="dashboardAlerts"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="assets">
+        <div class="panel">
+          <div class="panel-head">
+            <h3>設備資料管理</h3>
+            <span class="panel-subtitle" id="resultCount">0 筆資料</span>
+          </div>
+          <div class="toolbar">
+            <input id="searchInput" type="search" placeholder="搜尋設備編號、品牌、型號、使用人、IP、MAC..." />
+            <select id="typeFilter"></select>
+            <select id="statusFilter"></select>
+            <select id="deptFilter"></select>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>設備</th>
+                  <th>類型</th>
+                  <th>部門 / 使用人</th>
+                  <th>地點</th>
+                  <th>IP / MAC</th>
+                  <th>購買日</th>
+                  <th>保固到期</th>
+                  <th>狀態</th>
+                  <th>備註</th>
+                  <th>操作</th>
+                </tr>
+              </thead>
+              <tbody id="assetTable"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="analytics">
+        <div class="grid-2">
+          <div class="panel">
+            <div class="panel-head">
+              <h3>依設備類型統計</h3>
+              <span class="panel-subtitle">Type</span>
+            </div>
+            <div class="progress-list" id="typeBars"></div>
+          </div>
+          <div class="panel">
+            <div class="panel-head">
+              <h3>依狀態統計</h3>
+              <span class="panel-subtitle">Status</span>
+            </div>
+            <div class="progress-list" id="statusBars"></div>
+          </div>
+          <div class="panel">
+            <div class="panel-head">
+              <h3>依部門統計</h3>
+              <span class="panel-subtitle">Department</span>
+            </div>
+            <div class="progress-list" id="deptBars"></div>
+          </div>
+          <div class="panel">
+            <div class="panel-head">
+              <h3>保固到期提醒</h3>
+              <span class="panel-subtitle">30 天內</span>
+            </div>
+            <div class="alert-list" id="warrantyAnalysis"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="reminders">
+        <div class="grid-2">
+          <div class="panel">
+            <div class="panel-head">
+              <h3>保固 30 天內到期</h3>
+              <span class="panel-subtitle" id="warrantyCount">0 筆</span>
+            </div>
+            <div class="alert-list" id="warrantyList"></div>
+          </div>
+          <div class="panel">
+            <div class="panel-head">
+              <h3>維修中設備</h3>
+              <span class="panel-subtitle" id="repairCount">0 筆</span>
+            </div>
+            <div class="alert-list" id="repairList"></div>
+          </div>
+          <div class="panel full-width">
+            <div class="panel-head">
+              <h3>報廢設備</h3>
+              <span class="panel-subtitle" id="retiredCount">0 筆</span>
+            </div>
+            <div class="alert-list" id="retiredList"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="modal" id="assetModal" role="dialog" aria-modal="true" aria-labelledby="assetModalTitle">
+    <form class="modal-card" id="assetForm">
+      <div class="modal-head">
+        <h3 id="assetModalTitle">新增設備</h3>
+        <button class="btn icon" type="button" data-close-modal>×</button>
+      </div>
+      <div class="form-grid">
+        <input type="hidden" id="assetId" />
+        <div class="field">
+          <label for="assetCode">設備編號 *</label>
+          <input id="assetCode" required placeholder="例：PC-IT-001" />
+        </div>
+        <div class="field">
+          <label for="assetType">設備類型 *</label>
+          <select id="assetType" required></select>
+        </div>
+        <div class="field">
+          <label for="assetStatus">狀態 *</label>
+          <select id="assetStatus" required></select>
+        </div>
+        <div class="field">
+          <label for="brand">品牌 *</label>
+          <input id="brand" required placeholder="例：Dell" />
+        </div>
+        <div class="field">
+          <label for="model">型號 *</label>
+          <input id="model" required placeholder="例：OptiPlex 7010" />
+        </div>
+        <div class="field">
+          <label for="department">使用部門 *</label>
+          <input id="department" required placeholder="例：資訊部" />
+        </div>
+        <div class="field">
+          <label for="user">使用人</label>
+          <input id="user" placeholder="例：王小明" />
+        </div>
+        <div class="field">
+          <label for="location">放置地點</label>
+          <input id="location" placeholder="例：總公司 2F 機房" />
+        </div>
+        <div class="field">
+          <label for="ip">IP 位址</label>
+          <input id="ip" placeholder="例：192.168.10.25" />
+        </div>
+        <div class="field">
+          <label for="mac">MAC 位址</label>
+          <input id="mac" placeholder="例：00:1A:2B:3C:4D:5E" />
+        </div>
+        <div class="field">
+          <label for="purchaseDate">購買日期</label>
+          <input id="purchaseDate" type="date" />
+        </div>
+        <div class="field">
+          <label for="warrantyDate">保固到期日</label>
+          <input id="warrantyDate" type="date" />
+        </div>
+        <div class="field span-3">
+          <label for="notes">備註</label>
+          <textarea id="notes" placeholder="維修紀錄、配件、盤點備註..."></textarea>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button class="btn" type="button" data-close-modal>取消</button>
+        <button class="btn primary" type="submit">儲存設備</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="modal" id="importModal" role="dialog" aria-modal="true" aria-labelledby="importTitle">
+    <div class="modal-card">
+      <div class="modal-head">
+        <h3 id="importTitle">匯入 JSON</h3>
+        <button class="btn icon" type="button" data-close-import>×</button>
+      </div>
+      <div class="import-box">
+        <p class="panel-subtitle">請選擇由本系統匯出的 JSON 檔，匯入後會覆蓋目前 localStorage 資料。</p>
+        <input class="file-input" id="importFile" type="file" accept="application/json,.json" />
+      </div>
+      <div class="modal-foot">
+        <button class="btn" type="button" data-close-import>取消</button>
+        <button class="btn primary" type="button" id="importJsonBtn">確認匯入</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const STORAGE_KEY = "meita-it-assets-v1";
+    const assetTypes = ["桌上型電腦", "筆記型電腦", "印表機", "交換器", "無線 AP", "NAS", "掃描器", "網路設備", "其他"];
+    const statuses = ["使用中", "維修中", "閒置", "報廢"];
+
+    const defaultAssets = [
+      {
+        id: makeId(),
+        code: "PC-ADM-001",
+        type: "桌上型電腦",
+        brand: "Dell",
+        model: "OptiPlex 7010",
+        department: "行政部",
+        user: "林雅婷",
+        location: "總公司 2F 行政辦公區",
+        ip: "192.168.10.21",
+        mac: "00:1A:2B:3C:4D:11",
+        purchaseDate: "2024-02-15",
+        warrantyDate: "2027-02-14",
+        status: "使用中",
+        notes: "一般文書與 ERP 作業"
+      },
+      {
+        id: makeId(),
+        code: "NB-SAL-006",
+        type: "筆記型電腦",
+        brand: "Lenovo",
+        model: "ThinkPad T14",
+        department: "業務部",
+        user: "陳柏宇",
+        location: "業務部行動辦公",
+        ip: "DHCP",
+        mac: "00:1A:2B:3C:4D:22",
+        purchaseDate: "2023-09-08",
+        warrantyDate: nextDate(18),
+        status: "使用中",
+        notes: "保固即將到期，需評估延保"
+      },
+      {
+        id: makeId(),
+        code: "PRD-PRN-003",
+        type: "印表機",
+        brand: "Fuji Xerox",
+        model: "Apeos 3560",
+        department: "生產部",
+        user: "共用",
+        location: "工廠 1F 生產辦公室",
+        ip: "192.168.20.45",
+        mac: "00:1A:2B:3C:4D:33",
+        purchaseDate: "2022-11-20",
+        warrantyDate: "2026-11-19",
+        status: "使用中",
+        notes: "月印量偏高"
+      },
+      {
+        id: makeId(),
+        code: "NET-SW-001",
+        type: "交換器",
+        brand: "Cisco",
+        model: "CBS350-24T",
+        department: "資訊部",
+        user: "共用",
+        location: "總公司 2F 機房",
+        ip: "192.168.1.10",
+        mac: "00:1A:2B:3C:4D:44",
+        purchaseDate: "2023-01-10",
+        warrantyDate: "2028-01-09",
+        status: "使用中",
+        notes: "核心辦公網段"
+      },
+      {
+        id: makeId(),
+        code: "NET-AP-004",
+        type: "無線 AP",
+        brand: "Ubiquiti",
+        model: "UniFi U6 Pro",
+        department: "品保部",
+        user: "共用",
+        location: "品保實驗室",
+        ip: "192.168.30.12",
+        mac: "00:1A:2B:3C:4D:55",
+        purchaseDate: "2024-07-02",
+        warrantyDate: "2027-07-01",
+        status: "維修中",
+        notes: "訊號不穩，送修檢測中"
+      },
+      {
+        id: makeId(),
+        code: "NAS-IT-002",
+        type: "NAS",
+        brand: "Synology",
+        model: "DS923+",
+        department: "資訊部",
+        user: "共用",
+        location: "總公司 2F 機房",
+        ip: "192.168.1.30",
+        mac: "00:1A:2B:3C:4D:66",
+        purchaseDate: "2023-05-18",
+        warrantyDate: "2026-05-17",
+        status: "使用中",
+        notes: "部門檔案備份"
+      },
+      {
+        id: makeId(),
+        code: "SCM-FIN-001",
+        type: "掃描器",
+        brand: "Epson",
+        model: "DS-530II",
+        department: "財務部",
+        user: "張惠君",
+        location: "總公司 3F 財務部",
+        ip: "",
+        mac: "",
+        purchaseDate: "2021-03-12",
+        warrantyDate: "2024-03-11",
+        status: "報廢",
+        notes: "掃描模組故障，已列入報廢清冊"
+      },
+      {
+        id: makeId(),
+        code: "NB-QA-002",
+        type: "筆記型電腦",
+        brand: "HP",
+        model: "EliteBook 840",
+        department: "品保部",
+        user: "",
+        location: "備品櫃",
+        ip: "",
+        mac: "00:1A:2B:3C:4D:77",
+        purchaseDate: "2022-06-01",
+        warrantyDate: "2026-08-20",
+        status: "閒置",
+        notes: "備援設備"
+      }
+    ];
+
+    let assets = loadAssets();
+    let editingId = null;
+
+    const dom = {
+      pageTitle: document.getElementById("pageTitle"),
+      statsGrid: document.getElementById("statsGrid"),
+      assetTable: document.getElementById("assetTable"),
+      resultCount: document.getElementById("resultCount"),
+      searchInput: document.getElementById("searchInput"),
+      typeFilter: document.getElementById("typeFilter"),
+      statusFilter: document.getElementById("statusFilter"),
+      deptFilter: document.getElementById("deptFilter"),
+      assetModal: document.getElementById("assetModal"),
+      importModal: document.getElementById("importModal"),
+      assetForm: document.getElementById("assetForm"),
+      importFile: document.getElementById("importFile"),
+      toast: document.getElementById("toast")
+    };
+
+    init();
+
+    function init() {
+      fillSelects();
+      bindEvents();
+      renderAll();
+    }
+
+    function nextDate(days) {
+      const date = new Date();
+      date.setDate(date.getDate() + days);
+      return date.toISOString().slice(0, 10);
+    }
+
+    function makeId() {
+      if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
+      return `asset-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+    }
+
+    function loadAssets() {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (!saved) {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(defaultAssets));
+        return [...defaultAssets];
+      }
+      try {
+        const parsed = JSON.parse(saved);
+        return Array.isArray(parsed) ? parsed : [...defaultAssets];
+      } catch {
+        return [...defaultAssets];
+      }
+    }
+
+    function saveAssets() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(assets));
+    }
+
+    function fillSelects() {
+      fillOptions(dom.typeFilter, ["全部設備類型", ...assetTypes]);
+      fillOptions(dom.statusFilter, ["全部使用狀態", ...statuses]);
+      fillOptions(document.getElementById("assetType"), assetTypes);
+      fillOptions(document.getElementById("assetStatus"), statuses);
+      refreshDeptFilter();
+    }
+
+    function refreshDeptFilter() {
+      const selected = dom.deptFilter.value;
+      const departments = [...new Set(assets.map(asset => asset.department).filter(Boolean))].sort();
+      fillOptions(dom.deptFilter, ["全部部門", ...departments]);
+      if (departments.includes(selected)) dom.deptFilter.value = selected;
+    }
+
+    function fillOptions(select, options) {
+      select.innerHTML = options.map(option => `<option value="${escapeHtml(option)}">${escapeHtml(option)}</option>`).join("");
+    }
+
+    function bindEvents() {
+      document.querySelectorAll(".nav button").forEach(button => {
+        button.addEventListener("click", () => switchTab(button.dataset.tab, button.textContent.trim()));
+      });
+
+      document.getElementById("addAssetBtn").addEventListener("click", openCreateModal);
+      document.querySelectorAll("[data-close-modal]").forEach(button => button.addEventListener("click", closeAssetModal));
+      document.querySelectorAll("[data-close-import]").forEach(button => button.addEventListener("click", closeImportModal));
+      document.getElementById("openImportBtn").addEventListener("click", openImportModal);
+      document.getElementById("importJsonBtn").addEventListener("click", importJson);
+      document.getElementById("exportJsonBtn").addEventListener("click", exportJson);
+      document.getElementById("exportCsvBtn").addEventListener("click", exportCsv);
+
+      dom.assetForm.addEventListener("submit", saveAssetFromForm);
+      [dom.searchInput, dom.typeFilter, dom.statusFilter, dom.deptFilter].forEach(input => {
+        input.addEventListener("input", renderAssetTable);
+      });
+
+      dom.assetModal.addEventListener("click", event => {
+        if (event.target === dom.assetModal) closeAssetModal();
+      });
+
+      dom.importModal.addEventListener("click", event => {
+        if (event.target === dom.importModal) closeImportModal();
+      });
+    }
+
+    function switchTab(tabId, label) {
+      document.querySelectorAll(".nav button").forEach(button => button.classList.toggle("active", button.dataset.tab === tabId));
+      document.querySelectorAll(".section").forEach(section => section.classList.toggle("active", section.id === tabId));
+      dom.pageTitle.textContent = label.replace(/[◆▦▰!]/g, "").trim();
+      renderAll();
+    }
+
+    function renderAll() {
+      refreshDeptFilter();
+      renderStats();
+      renderAssetTable();
+      renderAnalytics();
+      renderReminders();
+    }
+
+    function renderStats() {
+      const stats = getStats();
+      const cards = [
+        ["設備總數", stats.total, "目前納管設備", ""],
+        ["電腦數量", stats.computers, "桌機與筆電合計", "green"],
+        ["筆電數量", stats.laptops, "行動辦公設備", ""],
+        ["印表機數量", stats.printers, "列印與事務設備", ""],
+        ["網路設備數量", stats.networks, "交換器、AP、NAS 等", "green"],
+        ["使用中", stats.status["使用中"] || 0, "正常服務設備", "green"],
+        ["維修中", stats.status["維修中"] || 0, "需追蹤處理", "amber"],
+        ["報廢 / 閒置", `${stats.status["報廢"] || 0} / ${stats.status["閒置"] || 0}`, "庫存狀態監控", "red"],
+        ["保固即將到期", stats.warrantySoon, "30 天內到期", "amber"]
+      ];
+
+      dom.statsGrid.innerHTML = cards.map(([label, value, note, color]) => `
+        <article class="stat-card ${color}">
+          <div class="stat-label">${label}</div>
+          <div class="stat-value">${value}</div>
+          <div class="stat-note">${note}</div>
+        </article>
+      `).join("");
+
+      document.getElementById("dashboardTypeBars").innerHTML = makeBars(countBy("type"));
+      document.getElementById("dashboardAlerts").innerHTML = makeAlertItems([
+        ...getWarrantySoon(),
+        ...assets.filter(asset => asset.status === "維修中")
+      ].slice(0, 6), "目前沒有近期警示。");
+    }
+
+    function getStats() {
+      const status = countBy("status");
+      return {
+        total: assets.length,
+        computers: assets.filter(asset => ["桌上型電腦", "筆記型電腦"].includes(asset.type)).length,
+        laptops: assets.filter(asset => asset.type === "筆記型電腦").length,
+        printers: assets.filter(asset => asset.type === "印表機").length,
+        networks: assets.filter(asset => ["交換器", "無線 AP", "NAS", "網路設備"].includes(asset.type)).length,
+        status,
+        warrantySoon: getWarrantySoon().length
+      };
+    }
+
+    function renderAssetTable() {
+      const filtered = getFilteredAssets();
+      dom.resultCount.textContent = `${filtered.length} 筆資料`;
+
+      if (!filtered.length) {
+        dom.assetTable.innerHTML = `<tr><td colspan="10"><div class="empty">沒有符合條件的設備資料</div></td></tr>`;
+        return;
+      }
+
+      dom.assetTable.innerHTML = filtered.map(asset => `
+        <tr>
+          <td>
+            <div class="asset-main">
+              <span class="asset-code">${escapeHtml(asset.code)}</span>
+              <span class="asset-model">${escapeHtml(asset.brand)}｜${escapeHtml(asset.model)}</span>
+            </div>
+          </td>
+          <td><span class="badge type">${escapeHtml(asset.type)}</span></td>
+          <td>${escapeHtml(asset.department)}<br><span class="asset-model">${escapeHtml(asset.user || "未指定")}</span></td>
+          <td>${escapeHtml(asset.location || "-")}</td>
+          <td>${escapeHtml(asset.ip || "-")}<br><span class="asset-model">${escapeHtml(asset.mac || "-")}</span></td>
+          <td>${formatDate(asset.purchaseDate)}</td>
+          <td>${warrantyCell(asset)}</td>
+          <td>${statusBadge(asset.status)}</td>
+          <td>${escapeHtml(asset.notes || "-")}</td>
+          <td>
+            <div class="actions">
+              <button class="btn icon" title="編輯" onclick="openEditModal('${asset.id}')">✎</button>
+              <button class="btn icon danger" title="刪除" onclick="deleteAsset('${asset.id}')">×</button>
+            </div>
+          </td>
+        </tr>
+      `).join("");
+    }
+
+    function getFilteredAssets() {
+      const keyword = dom.searchInput.value.trim().toLowerCase();
+      const type = dom.typeFilter.value;
+      const status = dom.statusFilter.value;
+      const dept = dom.deptFilter.value;
+
+      return assets.filter(asset => {
+        const searchable = Object.values(asset).join(" ").toLowerCase();
+        const matchKeyword = !keyword || searchable.includes(keyword);
+        const matchType = type === "全部設備類型" || asset.type === type;
+        const matchStatus = status === "全部使用狀態" || asset.status === status;
+        const matchDept = dept === "全部部門" || asset.department === dept;
+        return matchKeyword && matchType && matchStatus && matchDept;
+      });
+    }
+
+    function renderAnalytics() {
+      document.getElementById("typeBars").innerHTML = makeBars(countBy("type"));
+      document.getElementById("statusBars").innerHTML = makeBars(countBy("status"));
+      document.getElementById("deptBars").innerHTML = makeBars(countBy("department"));
+      document.getElementById("warrantyAnalysis").innerHTML = makeAlertItems(getWarrantySoon(), "30 天內沒有設備保固到期。");
+    }
+
+    function renderReminders() {
+      const warrantySoon = getWarrantySoon();
+      const repairing = assets.filter(asset => asset.status === "維修中");
+      const retired = assets.filter(asset => asset.status === "報廢");
+
+      document.getElementById("warrantyCount").textContent = `${warrantySoon.length} 筆`;
+      document.getElementById("repairCount").textContent = `${repairing.length} 筆`;
+      document.getElementById("retiredCount").textContent = `${retired.length} 筆`;
+      document.getElementById("warrantyList").innerHTML = makeAlertItems(warrantySoon, "目前沒有保固 30 天內到期的設備。");
+      document.getElementById("repairList").innerHTML = makeAlertItems(repairing, "目前沒有維修中設備。", "repairing");
+      document.getElementById("retiredList").innerHTML = makeAlertItems(retired, "目前沒有報廢設備。", "retired");
+    }
+
+    function countBy(key) {
+      return assets.reduce((acc, asset) => {
+        const value = asset[key] || "未指定";
+        acc[value] = (acc[value] || 0) + 1;
+        return acc;
+      }, {});
+    }
+
+    function makeBars(counts) {
+      const entries = Object.entries(counts).sort((a, b) => b[1] - a[1]);
+      if (!entries.length) return `<div class="empty">尚無資料</div>`;
+      const max = Math.max(...entries.map(([, value]) => value), 1);
+      return entries.map(([label, value]) => {
+        const percent = Math.round((value / max) * 100);
+        return `
+          <div class="progress-row">
+            <div class="progress-meta"><span>${escapeHtml(label)}</span><span>${value} 台</span></div>
+            <div class="bar"><span style="width:${percent}%"></span></div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function getWarrantySoon() {
+      const today = stripTime(new Date());
+      const limit = new Date(today);
+      limit.setDate(limit.getDate() + 30);
+      return assets
+        .filter(asset => {
+          if (!asset.warrantyDate || asset.status === "報廢") return false;
+          const warranty = stripTime(new Date(asset.warrantyDate));
+          return warranty >= today && warranty <= limit;
+        })
+        .sort((a, b) => new Date(a.warrantyDate) - new Date(b.warrantyDate));
+    }
+
+    function stripTime(date) {
+      return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    }
+
+    function makeAlertItems(items, emptyText, extraClass = "") {
+      if (!items.length) return `<div class="empty">${emptyText}</div>`;
+      return items.map(asset => `
+        <div class="alert-item ${extraClass || alertClass(asset)}">
+          <div>
+            <div class="alert-title">${escapeHtml(asset.code)}｜${escapeHtml(asset.type)}｜${escapeHtml(asset.brand)} ${escapeHtml(asset.model)}</div>
+            <div class="alert-detail">${escapeHtml(asset.department)} / ${escapeHtml(asset.user || "共用")} / ${escapeHtml(asset.location || "-")}</div>
+            <div class="alert-detail">保固到期：${formatDate(asset.warrantyDate)}　${escapeHtml(asset.notes || "")}</div>
+          </div>
+          ${statusBadge(asset.status)}
+        </div>
+      `).join("");
+    }
+
+    function alertClass(asset) {
+      if (asset.status === "維修中") return "repairing";
+      if (asset.status === "報廢") return "retired";
+      return "";
+    }
+
+    function warrantyCell(asset) {
+      const date = formatDate(asset.warrantyDate);
+      if (getWarrantySoon().some(item => item.id === asset.id)) {
+        return `${date}<br><span class="badge warn">30 天內到期</span>`;
+      }
+      return date;
+    }
+
+    function statusBadge(status) {
+      const classMap = {
+        "使用中": "using",
+        "維修中": "repair",
+        "閒置": "idle",
+        "報廢": "retired"
+      };
+      return `<span class="badge ${classMap[status] || "idle"}">${escapeHtml(status || "未指定")}</span>`;
+    }
+
+    function openCreateModal() {
+      editingId = null;
+      dom.assetForm.reset();
+      document.getElementById("assetId").value = "";
+      document.getElementById("assetModalTitle").textContent = "新增設備";
+      document.getElementById("assetStatus").value = "使用中";
+      dom.assetModal.classList.add("open");
+      document.getElementById("assetCode").focus();
+    }
+
+    function openEditModal(id) {
+      const asset = assets.find(item => item.id === id);
+      if (!asset) return;
+      editingId = id;
+      document.getElementById("assetModalTitle").textContent = "編輯設備";
+      document.getElementById("assetId").value = asset.id;
+      document.getElementById("assetCode").value = asset.code || "";
+      document.getElementById("assetType").value = asset.type || assetTypes[0];
+      document.getElementById("assetStatus").value = asset.status || statuses[0];
+      document.getElementById("brand").value = asset.brand || "";
+      document.getElementById("model").value = asset.model || "";
+      document.getElementById("department").value = asset.department || "";
+      document.getElementById("user").value = asset.user || "";
+      document.getElementById("location").value = asset.location || "";
+      document.getElementById("ip").value = asset.ip || "";
+      document.getElementById("mac").value = asset.mac || "";
+      document.getElementById("purchaseDate").value = asset.purchaseDate || "";
+      document.getElementById("warrantyDate").value = asset.warrantyDate || "";
+      document.getElementById("notes").value = asset.notes || "";
+      dom.assetModal.classList.add("open");
+      document.getElementById("assetCode").focus();
+    }
+
+    function closeAssetModal() {
+      dom.assetModal.classList.remove("open");
+    }
+
+    function saveAssetFromForm(event) {
+      event.preventDefault();
+      const payload = {
+        id: editingId || makeId(),
+        code: document.getElementById("assetCode").value.trim(),
+        type: document.getElementById("assetType").value,
+        brand: document.getElementById("brand").value.trim(),
+        model: document.getElementById("model").value.trim(),
+        department: document.getElementById("department").value.trim(),
+        user: document.getElementById("user").value.trim(),
+        location: document.getElementById("location").value.trim(),
+        ip: document.getElementById("ip").value.trim(),
+        mac: document.getElementById("mac").value.trim(),
+        purchaseDate: document.getElementById("purchaseDate").value,
+        warrantyDate: document.getElementById("warrantyDate").value,
+        status: document.getElementById("assetStatus").value,
+        notes: document.getElementById("notes").value.trim()
+      };
+
+      const duplicate = assets.some(asset => asset.code === payload.code && asset.id !== payload.id);
+      if (duplicate) {
+        showToast("設備編號已存在，請改用其他編號。");
+        return;
+      }
+
+      if (editingId) {
+        assets = assets.map(asset => asset.id === editingId ? payload : asset);
+        showToast("設備資料已更新。");
+      } else {
+        assets.unshift(payload);
+        showToast("已新增設備。");
+      }
+
+      saveAssets();
+      closeAssetModal();
+      renderAll();
+    }
+
+    function deleteAsset(id) {
+      const asset = assets.find(item => item.id === id);
+      if (!asset) return;
+      if (!confirm(`確定要刪除「${asset.code}」嗎？此動作無法復原。`)) return;
+      assets = assets.filter(item => item.id !== id);
+      saveAssets();
+      renderAll();
+      showToast("設備已刪除。");
+    }
+
+    function openImportModal() {
+      dom.importFile.value = "";
+      dom.importModal.classList.add("open");
+    }
+
+    function closeImportModal() {
+      dom.importModal.classList.remove("open");
+    }
+
+    function importJson() {
+      const file = dom.importFile.files[0];
+      if (!file) {
+        showToast("請先選擇 JSON 檔案。");
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        try {
+          const data = JSON.parse(reader.result);
+          if (!Array.isArray(data)) throw new Error("JSON 必須是設備陣列");
+          assets = data.map(normalizeImportedAsset);
+          saveAssets();
+          closeImportModal();
+          renderAll();
+          showToast(`匯入完成，共 ${assets.length} 筆設備。`);
+        } catch (error) {
+          showToast(`匯入失敗：${error.message}`);
+        }
+      };
+      reader.readAsText(file, "utf-8");
+    }
+
+    function normalizeImportedAsset(asset) {
+      return {
+        id: asset.id || makeId(),
+        code: String(asset.code || asset["設備編號"] || "").trim(),
+        type: String(asset.type || asset["設備類型"] || "其他").trim(),
+        brand: String(asset.brand || asset["品牌"] || "").trim(),
+        model: String(asset.model || asset["型號"] || "").trim(),
+        department: String(asset.department || asset["使用部門"] || "").trim(),
+        user: String(asset.user || asset["使用人"] || "").trim(),
+        location: String(asset.location || asset["放置地點"] || "").trim(),
+        ip: String(asset.ip || asset["IP 位址"] || "").trim(),
+        mac: String(asset.mac || asset["MAC 位址"] || "").trim(),
+        purchaseDate: asset.purchaseDate || asset["購買日期"] || "",
+        warrantyDate: asset.warrantyDate || asset["保固到期日"] || "",
+        status: statuses.includes(asset.status || asset["狀態"]) ? (asset.status || asset["狀態"]) : "使用中",
+        notes: String(asset.notes || asset["備註"] || "").trim()
+      };
+    }
+
+    function exportJson() {
+      downloadFile(`meita-assets-${todayString()}.json`, JSON.stringify(assets, null, 2), "application/json");
+      showToast("JSON 已匯出。");
+    }
+
+    function exportCsv() {
+      const headers = ["設備編號", "設備類型", "品牌", "型號", "使用部門", "使用人", "放置地點", "IP 位址", "MAC 位址", "購買日期", "保固到期日", "狀態", "備註"];
+      const rows = assets.map(asset => [
+        asset.code, asset.type, asset.brand, asset.model, asset.department, asset.user, asset.location,
+        asset.ip, asset.mac, asset.purchaseDate, asset.warrantyDate, asset.status, asset.notes
+      ]);
+      const csv = [headers, ...rows].map(row => row.map(csvCell).join(",")).join("\n");
+      downloadFile(`meita-assets-${todayString()}.csv`, "\ufeff" + csv, "text/csv;charset=utf-8");
+      showToast("CSV 已匯出。");
+    }
+
+    function csvCell(value) {
+      return `"${String(value ?? "").replaceAll('"', '""')}"`;
+    }
+
+    function downloadFile(filename, content, type) {
+      const blob = new Blob([content], { type });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = filename;
+      link.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function todayString() {
+      return new Date().toISOString().slice(0, 10).replaceAll("-", "");
+    }
+
+    function formatDate(value) {
+      if (!value) return "-";
+      return value;
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function showToast(message) {
+      dom.toast.textContent = message;
+      dom.toast.classList.add("show");
+      clearTimeout(showToast.timer);
+      showToast.timer = setTimeout(() => dom.toast.classList.remove("show"), 2600);
+    }
+
+    window.openEditModal = openEditModal;
+    window.deleteAsset = deleteAsset;
+  </script>
+</body>
+</html>
